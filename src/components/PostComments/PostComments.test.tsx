@@ -1,10 +1,19 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import Post from '.';
-import PostComment from '.';
+import { render, fireEvent, screen } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import Post from "../Post";
 
-describe('Teste para o componente PostComment', () => {
-    it('Deve renderizar o componente corretamente', () => {
-        render(<PostComment/>);
-        expect(screen.getByText('Comentar')).toBeInTheDocument();
-    });
+test("Inserção de dois comentários", () => {
+  render(<Post imageUrl="url_da_imagem">Texto do post</Post>);
+
+  const textarea = screen.getByTestId("comment-textarea");
+
+  fireEvent.change(textarea, { target: { value: "Primeiro comentário" } });
+  fireEvent.submit(screen.getByTestId("comment-form"));
+
+  expect(screen.getByText("Primeiro comentário")).toBeInTheDocument();
+
+  fireEvent.change(textarea, { target: { value: "Segundo comentário" } });
+  fireEvent.submit(screen.getByTestId("comment-form"));
+
+  expect(screen.getByText("Segundo comentário")).toBeInTheDocument();
 });
